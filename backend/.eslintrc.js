@@ -22,11 +22,22 @@ module.exports = {
       },
     ],
     semi: ['error', 'always'],
+    'node/no-missing-import': [
+      'error',
+      {
+        allowModules: [],
+        resolvePaths: [],
+        tryExtensions: ['.js', '.json', '.node', '.ts'],
+      },
+    ],
   },
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.ts', '.json'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+      },
+      typescript: {
+        alwaysTryTypes: true,
       },
     },
     'import/extensions': ['.js', '.ts', '.mjs'],
