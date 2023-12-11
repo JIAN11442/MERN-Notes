@@ -1,20 +1,13 @@
 import 'dotenv/config';
-import express from 'express';
 import mongoose from 'mongoose';
+import app from './app';
 import env from './utils/validateEnv';
 
-const app = express();
+const port = env.PORT;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+mongoose.connect(env.MONGODB_CONNECTION_STRING).then(() => {
+  console.log('Connected to MongoDB');
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
 });
-
-mongoose
-  .connect(env.MONGODB_CONNECTION_STRING!)
-  .then(() => {
-    console.log('Connected to MongoDB!');
-    app.listen(env.PORT, () => {
-      console.log(`Server listening on http://localhost:${env.PORT}`);
-    });
-  })
-  .catch(console.error);
