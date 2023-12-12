@@ -3,6 +3,8 @@ import noteRouter from './router/notes.router';
 
 const app = express();
 
+app.use(express.json());
+
 app.use('/api/notes', noteRouter);
 
 app.use((req, res, next) => {

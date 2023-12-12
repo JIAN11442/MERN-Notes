@@ -11,3 +11,18 @@ export const getNotes: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const createNote: RequestHandler = async (req, res, next) => {
+  const { title, content } = req.body;
+  // console.log('Received title:', title);
+  // console.log('Received content:', content);
+  try {
+    const newNote = await noteSchemaModel.create({
+      title: title,
+      content: content,
+    });
+    res.status(201).json(newNote);
+  } catch (error) {
+    next(error);
+  }
+};
