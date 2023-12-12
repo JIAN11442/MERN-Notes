@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get('/', NotesController.getNotes);
 
+router.get('/query', NotesController.getNoteById);
+
 router.post('/', NotesController.createNote);
 
 export default router;

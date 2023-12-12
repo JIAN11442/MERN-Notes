@@ -1,7 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
+import morgan from 'morgan';
 import noteRouter from './router/notes.router';
 
 const app = express();
+
+app.use(morgan('dev'));
 
 app.use(express.json());
 

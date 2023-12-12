@@ -12,10 +12,18 @@ export const getNotes: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getNoteById: RequestHandler = async (req, res, next) => {
+  const noteId = req.query.noteId as string;
+  try {
+    const noteById = await noteSchemaModel.findById(noteId).exec();
+    res.status(200).json(noteById);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createNote: RequestHandler = async (req, res, next) => {
   const { title, content } = req.body;
-  // console.log('Received title:', title);
-  // console.log('Received content:', content);
   try {
     const newNote = await noteSchemaModel.create({
       title: title,
