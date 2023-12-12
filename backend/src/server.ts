@@ -1,12 +1,14 @@
-import express from 'express';
+import 'dotenv/config';
+import mongoose from 'mongoose';
+import app from './app';
+import env from './utils/validateEnv';
+import groupConsole from './utils/groupConsole';
 
-const app = express();
-const port = 3000;
+const port = env.PORT;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-}); 
-
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+mongoose.connect(env.MONGODB_CONNECTION_STRING).then(() => {
+  groupConsole('Connected to MongoDB');
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
 });
