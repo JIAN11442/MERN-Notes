@@ -9,4 +9,6 @@ router.get('/query', NotesController.getNoteById);
 
 router.post('/', NotesController.createNote);
 
+router.patch('/query', NotesController.updateNoteById);
+
 export default router;
