@@ -1,9 +1,18 @@
 import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import createHttpError, { isHttpError } from 'http-errors';
+import cors from 'cors';
 import noteRouter from './router/notes.router';
 
 const app = express();
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // 允许访问的前端域
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 允许的 HTTP 方法
+    credentials: true, // 允许发送身份验证信息（如 cookies）
+  }),
+);
 
 app.use(morgan('dev'));
 

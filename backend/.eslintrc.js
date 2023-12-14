@@ -21,7 +21,8 @@ module.exports = {
         ts: 'never',
       },
     ],
-    semi: ['error', 'always'],
+    // 'import/no-extraneous-dependencies': ['error', { packageDir: './backend' }],
+
     'node/no-missing-import': [
       'error',
       {
@@ -30,6 +31,7 @@ module.exports = {
         tryExtensions: ['.js', '.json', '.node', '.ts'],
       },
     ],
+    semi: ['error', 'always'],
   },
   settings: {
     'import/resolver': {
