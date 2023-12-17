@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import Notes from '@/components/Notes';
+import NotesContent from "@/components/NotesContent";
 
 export default function Home() {
   return (
     <main>
-      <Notes />
+      <NotesContent />
     </main>
   );
 }
