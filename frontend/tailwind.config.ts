@@ -9,8 +9,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'cornsilk-100': '#fff8dc',
-        'cornsilk-200': '#fff3c3',
+        'cornsilk-100': '#fffcf0',
+        'cornsilk-200': '#fff8dc',
+        'cornsilk-300': '#fff4c8',
+        'cornsilk-400': '#fff0b5',
+        'cornsilk-500': '#ffeca1',
+        'cornsilk-600': '#ffe88e',
+        'cornsilk-700': '#ffe47a',
+        'cornsilk-800': '#ffe066',
+        'cornsilk-900': '#ffdd53',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

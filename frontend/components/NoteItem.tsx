@@ -1,9 +1,11 @@
-import { NoteIdCollapsed, NoteType } from '@/types';
-import { Card, CardBody, CardText, CardTitle } from 'react-bootstrap';
-import '../styles/scrollbar.css';
+import { useRef } from 'react';
+
+import { NoteType } from '@/types';
+import useNotes from '@/utils/useNotes';
+import CreatedUpdatedDate from '@/utils/formatData';
+
 import '../styles/noteCard.css';
-import useNotes from '@/hooks/useNotes';
-import { useEffect, useRef } from 'react';
+import '../styles/scrollbar.css';
 
 interface NoteItemProps {
   note: NoteType;
@@ -25,15 +27,18 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
     (item) => item._id === note._id
   )[0].collapsed;
 
+  const formatDate = CreatedUpdatedDate(note.createdAt, note.updatedAt);
+
   return (
     <div
       onClick={() => setNoteIdCollapsed(noteIdCollapsed, note._id)}
       className={`
         flex
         flex-col
-        max-h-[300px]
+        min-h-[200px]
+        max-h-[350px]
         bg-cornsilk-100
-        border
+        border-1
         rounded-md
         shadow-md
         cursor-pointer
@@ -50,7 +55,8 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
           flex-shrink-0
           px-3
           py-2
-          bg-cornsilk-200
+          bg-gradient-to-r
+          from-cornsilk-500
           text-md
           font-semibold
           w-full
@@ -94,12 +100,16 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
           flex
           flex-shrink-0
           px-3
-          py-2
-          bg-cornsilk-200
-          text-sm
+          pt-2
+          pb-2
+          items-center
+          justify-end
+          bg-gradient-to-l
+          from-cornsilk-300
+          text-[11px]
         `}
       >
-        {note.createdAt}
+        {formatDate}
       </div>
     </div>
   );
