@@ -2,6 +2,11 @@ export interface NoteType {
   _id: string;
   title: string;
   content: string;
-  createAt: string;
-  updateAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NoteIdCollapsed {
+  _id: string;
+  collapsed: boolean;
 }

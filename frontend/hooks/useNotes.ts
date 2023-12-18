@@ -1,14 +1,40 @@
-import { NoteType } from '@/types';
+import { NoteIdCollapsed, NoteType } from '@/types';
 import { create } from 'zustand';
 
 interface useNotesProps {
   notes: NoteType[];
   setNotes: (notes: NoteType[]) => void;
+  noteIdCollapsed: NoteIdCollapsed[];
+  setNoteIdCollapsed: (
+    noteIdCollapsed?: NoteIdCollapsed[],
+    targetId?: string
+  ) => void;
 }
 
 const useNotes = create<useNotesProps>((set) => ({
   notes: [],
   setNotes: (notes: NoteType[]) => set({ notes: notes }),
+  noteIdCollapsed: [],
+  setNoteIdCollapsed: (
+    noteIdCollapsed?: NoteIdCollapsed[],
+    targetId?: string
+  ) => {
+    // 當輸入的值符合 noteIdCollapsed 的格式時，直接設定，但如果不符合，則要先判斷是否有 targetId，有的話要以改變當前targetId的collapsed狀態
+    if (noteIdCollapsed && noteIdCollapsed.length > 0) {
+      if (targetId) {
+        const targetIndex = noteIdCollapsed.findIndex(
+          (item: NoteIdCollapsed) => item._id === targetId
+        );
+        if (targetIndex !== -1) {
+          noteIdCollapsed[targetIndex].collapsed =
+            !noteIdCollapsed[targetIndex].collapsed;
+        }
+      }
+      set({ noteIdCollapsed: noteIdCollapsed });
+    } else {
+      set({ noteIdCollapsed: noteIdCollapsed });
+    }
+  },
 }));
 
 export default useNotes;
