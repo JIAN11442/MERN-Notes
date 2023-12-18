@@ -3,14 +3,17 @@
 import { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 
+import Button from './Button';
 import NoteItem from './NoteItem';
 import * as NoteApi from '../fetchApi/notes.api';
 
 import { NoteType } from '@/types';
 import useNotes from '@/utils/useNotes';
+import useInputModal from '@/utils/useInputModal';
 
 const NotesContent = () => {
   const { notes, setNotes, setNoteIdCollapsed } = useNotes();
+  const inputModal = useInputModal();
 
   // Fetch All Notes && Collapse
   useEffect(() => {
@@ -32,8 +35,28 @@ const NotesContent = () => {
   }, []);
 
   return (
-    <Container
+    <div
       className="
+        pt-10
+        flex
+        flex-col
+        items-center
+        justify-center
+      "
+    >
+      <Button
+        onClick={() => inputModal.open()}
+        className="
+          flex
+          py-2
+          text-white
+          rounded-lg
+        "
+      >
+        Add a note
+      </Button>
+      <Container
+        className="
         grid
         sm:grid-cols-1
         md:grid-cols-2
@@ -42,11 +65,12 @@ const NotesContent = () => {
         gap-3
         p-4
       "
-    >
-      {notes.map((note) => (
-        <NoteItem key={note._id} note={note} />
-      ))}
-    </Container>
+      >
+        {notes.map((note) => (
+          <NoteItem key={note._id} note={note} />
+        ))}
+      </Container>
+    </div>
   );
 };
 
