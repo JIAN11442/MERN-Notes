@@ -4,6 +4,7 @@ import { Inter, Figtree } from 'next/font/google';
 import './globals.css';
 import BootstrapClient from '@/components/BootstrapClient';
 import ModalProvider from '@/providers/ModalProvider';
+import ToasterProvider from '@/providers/ToasterProvider';
 
 const font = Figtree({ subsets: ['latin'] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
+        <ToasterProvider />
         <ModalProvider />
         <BootstrapClient>{children}</BootstrapClient>
       </body>

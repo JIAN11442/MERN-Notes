@@ -1,10 +1,13 @@
 import { useRouter } from 'next/navigation';
-import { FieldValues, useForm, SubmitHandler } from 'react-hook-form';
+import { PiWarningCircleLight } from 'react-icons/pi';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import taost, { toast } from 'react-hot-toast';
 
 import Modal from './Modal';
 import Button from './Button';
 
 import useInputModal from '@/utils/useInputModal';
+import { NoteInput } from '@/fetchApi/notes.api';
 
 const InputModal = () => {
   const inputModal = useInputModal();
@@ -19,16 +22,23 @@ const InputModal = () => {
     reset,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FieldValues>({
+  } = useForm<NoteInput>({
     defaultValues: {
       title: '',
       content: '',
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (value) => {
+  const onSubmit: SubmitHandler<NoteInput> = async (value) => {
     try {
-      console.log(value);
+      const noteTitle = value.title;
+      const noteContent = value.content;
+
+      if (!noteTitle) {
+        taost.error('Title is required');
+      } else {
+        toast.success('Node added successfully');
+      }
     } catch (error) {
       console.log(error);
       alert(error);
@@ -62,24 +72,66 @@ const InputModal = () => {
             "
           >
             <p className="text-md font-medium">Title</p>
-            <input
-              id="title"
-              type="text"
-              placeholder="Title"
-              maxLength={25}
-              {...register('title', { required: true })}
-              className="
+            <div className="flex relative">
+              <input
+                id="title"
+                type="text"
+                placeholder="Title"
+                maxLength={25}
+                {...register('title', { required: 'Required' })}
+                className={`
                 flex
                 w-full
-                py-2.5
                 px-3
-                border
+                py-2.5
+                border-1
+                outline-none
                 rounded-md
-                focus:outline-blue-100
+                shadow-[1px_1px_6px_1px_rgba(0,0,0,0)]
                 focus:placeholder:text-transparent
                 text-md
-              "
-            />
+                ${
+                  errors.title
+                    ? `
+                    border-red-200 
+                    shadow-red-200
+                      `
+                    : `
+                      focus:border-blue-200
+                      focus:shadow-blue-200
+                    `
+                }
+              `}
+              />
+              {/* Warning */}
+              <PiWarningCircleLight
+                color="red"
+                size={22}
+                className={`
+                  absolute
+                  right-2
+                  translate-y-[-50%]
+                  top-1/2
+                  ${errors.title ? 'flex' : 'hidden'}
+                `}
+              />
+            </div>
+            {/* Error */}
+            <div
+              className={`
+                flex
+                ${errors.title ? 'flex' : 'hidden'}
+            `}
+            >
+              <p
+                className="
+                  text-sm
+                text-red-500
+                "
+              >
+                {errors?.title?.message}
+              </p>
+            </div>
           </div>
 
           {/* Content */}
@@ -94,7 +146,7 @@ const InputModal = () => {
             <textarea
               id="content"
               placeholder="Content"
-              {...register('content', { required: true })}
+              {...register('content', { required: false })}
               className="
                 flex
                 w-full
@@ -102,9 +154,12 @@ const InputModal = () => {
                 max-h-[400px]
                 py-2
                 px-3
-                border
+                outline-none
+                border-1
                 rounded-md
-                focus:outline-blue-100
+                shadow-[1px_1px_6px_1px_rgba(0,0,0,0)]
+                focus:border-blue-100
+                focus:shadow-blue-200
                 whitespace-pre-wrap
                 text-md
               "
