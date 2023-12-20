@@ -1,27 +1,29 @@
-import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import { PiWarningCircleLight } from 'react-icons/pi';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import taost, { toast } from 'react-hot-toast';
 
 import Modal from './Modal';
 import Button from './Button';
 
+import useNotes from '@/utils/useNotes';
 import useInputModal from '@/utils/useInputModal';
+import * as NotesApi from '@/fetchApi/notes.api';
 import { NoteInput } from '@/fetchApi/notes.api';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const InputModal = () => {
   const inputModal = useInputModal();
   const router = useRouter();
+  const { setNotes, notes, setNoteIdCollapsed, noteIdCollapsed } = useNotes();
   const onChange = () => {
     inputModal.close();
-    // router.refresh();
   };
 
   const {
     register,
-    reset,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<NoteInput>({
     defaultValues: {
       title: '',
@@ -29,24 +31,29 @@ const InputModal = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<NoteInput> = async (value) => {
+  const onSubmit: SubmitHandler<NoteInput> = async (newNote: NoteInput) => {
     try {
-      const noteTitle = value.title;
-      const noteContent = value.content;
+      const noteResponse = await NotesApi.createNote(newNote);
+      console.log(noteResponse);
+      setNoteIdCollapsed([
+        ...noteIdCollapsed,
+        { _id: noteResponse._id, collapsed: false },
+      ]);
+      setNotes([...notes, noteResponse]);
 
-      if (!noteTitle) {
-        taost.error('Title is required');
-      } else {
-        toast.success('Node added successfully');
-      }
+      toast.success('Note created successfully');
     } catch (error) {
       console.log(error);
       alert(error);
     }
-
-    // inputModal.close();
-    // reset();
   };
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      inputModal.close();
+      router.refresh();
+    }
+  }, [isSubmitSuccessful]);
 
   return (
     <Modal isOpen={inputModal.isOpen} onChange={onChange} title="Add Note">

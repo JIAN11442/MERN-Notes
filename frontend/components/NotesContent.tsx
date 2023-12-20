@@ -5,7 +5,7 @@ import { Container } from 'react-bootstrap';
 
 import Button from './Button';
 import NoteItem from './NoteItem';
-import * as NoteApi from '../fetchApi/notes.api';
+import * as NotesApi from '../fetchApi/notes.api';
 
 import { NoteType } from '@/types';
 import useNotes from '@/utils/useNotes';
@@ -19,7 +19,7 @@ const NotesContent = () => {
   useEffect(() => {
     const loadNotes = async () => {
       try {
-        const notes = await NoteApi.fetchNotes();
+        const notes = await NotesApi.fetchNotes();
         setNotes(notes);
         setNoteIdCollapsed([
           ...notes.map((note: NoteType) => {
@@ -55,7 +55,7 @@ const NotesContent = () => {
       >
         Add a note
       </Button>
-      <Container
+      <div
         className="
         grid
         sm:grid-cols-1
@@ -63,13 +63,14 @@ const NotesContent = () => {
         lg:grid-cols-3
         xl:grid-cols-4
         gap-3
-        p-4
+        py-4
+        px-10
       "
       >
         {notes.map((note) => (
           <NoteItem key={note._id} note={note} />
         ))}
-      </Container>
+      </div>
     </div>
   );
 };

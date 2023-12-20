@@ -35,6 +35,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
       className={`
         flex
         flex-col
+        min-w-[300px]
         min-h-[200px]
         max-h-[350px]
         bg-cornsilk-100
