@@ -1,18 +1,25 @@
-import { useRef } from 'react';
+import { useRef } from "react";
+import { SlOptionsVertical } from "react-icons/sl";
 
-import { NoteType } from '@/types';
-import useNotes from '@/utils/useNotes';
-import CreatedUpdatedDate from '@/utils/formatData';
+import { NoteType } from "@/types";
+import useNotes from "@/utils/useNotes";
+import CreatedUpdatedDate from "@/utils/formatData";
 
-import '../styles/noteCard.css';
-import '../styles/scrollbar.css';
+import "../styles/noteCard.css";
+import "../styles/scrollbar.css";
+import OptionsModal from "./OptionsModal";
 
 interface NoteItemProps {
   note: NoteType;
 }
 
 const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
-  const { noteIdCollapsed, setNoteIdCollapsed } = useNotes();
+  const {
+    noteIdCollapsed,
+    setNoteIdCollapsed,
+    noteIdActivedOptions,
+    setNoteIdOptions,
+  } = useNotes();
   const textRef = useRef<HTMLDivElement>(null);
   const noteRef = useRef<HTMLDivElement>(null);
   const overflowY = () => {
@@ -31,7 +38,6 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
 
   return (
     <div
-      onClick={() => setNoteIdCollapsed(noteIdCollapsed, note._id)}
       className={`
         flex
         flex-col
@@ -49,26 +55,69 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
         transition
       `}
     >
-      {/* Title */}
+      {/* Title  && Options*/}
       <div
-        className={`
+        className="
+          relative
           flex
           flex-shrink-0
           px-3
           py-2
+          items-center
+          justify-between
           bg-gradient-to-r
           from-cornsilk-500
-          text-md
-          font-semibold
-          w-full
-          truncate 
-        `}
+        "
       >
-        {note.title}
+        {/* Title */}
+        <div
+          className={`
+            flex-1
+            w-full
+            text-md
+            font-semibold
+            truncate
+          `}
+        >
+          {note.title}
+        </div>
+
+        {/* Options */}
+        <div
+          className="
+            group
+            relative
+            flex
+            pl-4
+            h-full
+            items-center
+            justify-center
+          "
+        >
+          <SlOptionsVertical
+            onClick={() => {
+              setNoteIdOptions(noteIdActivedOptions, note._id);
+            }}
+            size={15}
+            className="
+              text-neutral-500/80
+              group-hover:text-neutral-500
+              group-hover:scale-[1.1]
+              transition
+            "
+          />
+          <OptionsModal
+            isOpen={
+              noteIdActivedOptions.filter((item) => item._id === note._id)[0]
+                .activedOptions
+            }
+          />
+        </div>
       </div>
 
       {/* Content */}
       <div
+        onClick={() => setNoteIdCollapsed(noteIdCollapsed, note._id)}
         ref={noteRef}
         className={`
           flex
@@ -78,8 +127,8 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
           overflow-hidden
           ${
             overflowY() && currNoteIdCollapsed === false
-              ? 'custom-mask-image'
-              : 'overflow-y-auto custom-scrollbar'
+              ? "custom-mask-image"
+              : "overflow-y-auto custom-scrollbar"
           }
         `}
       >

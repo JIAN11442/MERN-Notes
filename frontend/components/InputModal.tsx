@@ -1,16 +1,16 @@
-import { toast } from 'react-hot-toast';
-import { PiWarningCircleLight } from 'react-icons/pi';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { toast } from "react-hot-toast";
+import { PiWarningCircleLight } from "react-icons/pi";
+import { useForm, SubmitHandler } from "react-hook-form";
 
-import Modal from './Modal';
-import Button from './Button';
+import Modal from "./Modal";
+import Button from "./Button";
 
-import useNotes from '@/utils/useNotes';
-import useInputModal from '@/utils/useInputModal';
-import * as NotesApi from '@/fetchApi/notes.api';
-import { NoteInput } from '@/fetchApi/notes.api';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import useNotes from "@/utils/useNotes";
+import useInputModal from "@/utils/useInputModal";
+import * as NotesApi from "@/fetchApi/notes.api";
+import { NoteInput } from "@/fetchApi/notes.api";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const InputModal = () => {
   const inputModal = useInputModal();
@@ -26,8 +26,8 @@ const InputModal = () => {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<NoteInput>({
     defaultValues: {
-      title: '',
-      content: '',
+      title: "",
+      content: "",
     },
   });
 
@@ -41,7 +41,7 @@ const InputModal = () => {
       ]);
       setNotes([...notes, noteResponse]);
 
-      toast.success('Note created successfully');
+      toast.success("Note created successfully");
     } catch (error) {
       console.log(error);
       alert(error);
@@ -85,7 +85,7 @@ const InputModal = () => {
                 type="text"
                 placeholder="Title"
                 maxLength={25}
-                {...register('title', { required: 'Required' })}
+                {...register("title", { required: "Required" })}
                 className={`
                 flex
                 w-full
@@ -119,7 +119,7 @@ const InputModal = () => {
                   right-2
                   translate-y-[-50%]
                   top-1/2
-                  ${errors.title ? 'flex' : 'hidden'}
+                  ${errors.title ? "flex" : "hidden"}
                 `}
               />
             </div>
@@ -127,7 +127,7 @@ const InputModal = () => {
             <div
               className={`
                 flex
-                ${errors.title ? 'flex' : 'hidden'}
+                ${errors.title ? "flex" : "hidden"}
             `}
             >
               <p
@@ -153,7 +153,7 @@ const InputModal = () => {
             <textarea
               id="content"
               placeholder="Content"
-              {...register('content', { required: false })}
+              {...register("content", { required: false })}
               className="
                 flex
                 w-full

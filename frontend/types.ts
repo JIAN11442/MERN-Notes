@@ -10,3 +10,8 @@ export interface NoteIdCollapsed {
   _id: string;
   collapsed: boolean;
 }
+
+export interface NoteIdActivedOptions {
+  _id: string;
+  activedOptions: boolean;
+}

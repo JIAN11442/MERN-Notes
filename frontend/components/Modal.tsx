@@ -1,6 +1,6 @@
-import { IoMdClose } from 'react-icons/io';
-import * as Dialog from '@radix-ui/react-dialog';
-import { twMerge } from 'tailwind-merge';
+import { IoMdClose } from "react-icons/io";
+import * as Dialog from "@radix-ui/react-dialog";
+import { twMerge } from "tailwind-merge";
 
 interface ModalProps {
   isOpen: boolean;
@@ -86,7 +86,7 @@ const Modal: React.FC<ModalProps> = ({
           </div>
           <Dialog.Description
             className={`
-              ${description ? 'flex' : 'hidden'}
+              ${description ? "flex" : "hidden"}
               text-sm
               font-light
               mb-5
