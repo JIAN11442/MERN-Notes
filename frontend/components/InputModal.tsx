@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
@@ -5,17 +7,19 @@ import { PiWarningCircleLight } from 'react-icons/pi';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from './Button';
-import TitleModal from './TitleModal';
+import Modal from './Modal';
 
 import useNotes from '@/utils/useNotes';
 import useInputModal from '@/utils/useInputModal';
 import * as NotesApi from '@/fetchApi/notes.api';
 import { NoteInput } from '@/fetchApi/notes.api';
+import useOptionModal from '@/utils/useOptionModal';
 
 const InputModal = () => {
   const inputModal = useInputModal();
   const router = useRouter();
   const { setNotes, notes, setNoteIdCollapsed, noteIdCollapsed } = useNotes();
+  const { setNoteIdOptions, noteIdActivedOptions } = useOptionModal();
   const onChange = () => {
     inputModal.close();
   };
@@ -40,6 +44,10 @@ const InputModal = () => {
         { _id: noteResponse._id, collapsed: false },
       ]);
       setNotes([...notes, noteResponse]);
+      setNoteIdOptions([
+        ...noteIdActivedOptions,
+        { _id: noteResponse._id, activedOptions: false },
+      ]);
 
       toast.success('Note created successfully');
     } catch (error) {
@@ -56,7 +64,7 @@ const InputModal = () => {
   }, [isSubmitSuccessful]);
 
   return (
-    <TitleModal isOpen={inputModal.isOpen} onChange={onChange} title="Add Note">
+    <Modal isOpen={inputModal.isOpen} onChange={onChange} title="Add Note">
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div
@@ -197,7 +205,7 @@ const InputModal = () => {
           </Button>
         </div>
       </form>
-    </TitleModal>
+    </Modal>
   );
 };
 

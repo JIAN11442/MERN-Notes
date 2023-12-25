@@ -13,8 +13,7 @@ import useOptionModal from '@/utils/useOptionModal';
 
 const NotesContent = () => {
   const { notes, setNotes, setNoteIdCollapsed } = useNotes();
-  const { setNoteIdOptions, setNoteIdEdited, setNoteIdDeleted, reset } =
-    useOptionModal();
+  const { setNoteIdOptions, reset } = useOptionModal();
   const inputModal = useInputModal();
 
   // Fetch All Notes && Collapse
@@ -33,23 +32,13 @@ const NotesContent = () => {
             return { _id: note._id, activedOptions: false };
           }),
         ]);
-        setNoteIdEdited([
-          ...notes.map((note: NoteType) => {
-            return { _id: note._id, isEdited: false, noteContent: note };
-          }),
-        ]);
-        setNoteIdDeleted([
-          ...notes.map((note: NoteType) => {
-            return { _id: note._id, isDeleted: false, noteContent: note };
-          }),
-        ]);
       } catch (error) {
         console.log(error);
         alert(error);
       }
     };
     loadNotes();
-  }, []);
+  }, [setNoteIdCollapsed, setNoteIdOptions, setNotes]);
 
   return (
     <div className="flex flex-col">

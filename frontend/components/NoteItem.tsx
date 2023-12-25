@@ -30,9 +30,18 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
   };
   const currNoteIdCollapsed = noteIdCollapsed.filter(
     (item) => item._id === note._id
-  )[0].collapsed;
+  )[0]?.collapsed;
 
   const formatDate = CreatedUpdatedDate(note.createdAt, note.updatedAt);
+  const handleOptionModalIsOpen = () => {
+    if (noteIdActivedOptions) {
+      const isOpen = noteIdActivedOptions.filter(
+        (item: NoteIdActivedOptions) => item._id === note._id
+      )[0]?.activedOptions;
+
+      return isOpen;
+    }
+  };
   const handleOptionsOnChange = () => {
     reset();
   };
@@ -117,11 +126,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
             "
           >
             <OptionsModal
-              isOpen={
-                noteIdActivedOptions.filter(
-                  (item: NoteIdActivedOptions) => item._id === note._id
-                )[0].activedOptions
-              }
+              isOpen={handleOptionModalIsOpen()}
               onChange={handleOptionsOnChange}
               note={note}
             />
@@ -154,6 +159,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
           className={`
             flex-1
             text-sm
+            font-medium
             text-neutral-600
             whitespace-pre-line
           `}

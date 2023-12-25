@@ -16,14 +16,12 @@ export interface NoteIdActivedOptions {
   activedOptions: boolean;
 }
 
-export interface NoteIdEdited {
-  _id: string;
+export interface NoteIsEdited {
   isEdited: boolean;
-  noteContent: NoteType;
+  note: NoteType | null;
 }
 
-export interface NoteIdDeleted {
-  _id: string;
+export interface NoteIsDeleted {
   isDeleted: boolean;
-  noteContent: NoteType;
+  note: NoteType | null;
 }

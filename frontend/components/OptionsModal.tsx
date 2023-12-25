@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { MdOutlineDelete, MdOutlineEditNote } from 'react-icons/md';
+import { useEffect, useRef } from "react";
+import { MdOutlineDelete, MdOutlineEditNote } from "react-icons/md";
 
-import { NoteType } from '@/types';
-import useOptionModal from '@/utils/useOptionModal';
+import { NoteType } from "@/types";
+import useOptionModal from "@/utils/useOptionModal";
 
 interface OptionsModalProps {
   isOpen?: boolean;
@@ -16,24 +16,16 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
   note,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const {
-    noteIdActivedOptions,
-    noteIdEdited,
-    noteIdDeleted,
-    setNoteIdEdited,
-    setNoteIdDeleted,
-    reset,
-  } = useOptionModal();
+  const { noteIdActivedOptions, reset, editModalOpen, deleteModalOpen } =
+    useOptionModal();
 
   const handleEditedClick = () => {
+    editModalOpen(note);
     reset();
-    setNoteIdEdited(noteIdEdited, note._id, note);
-    console.log(noteIdEdited);
   };
   const handleDeletedClick = () => {
+    deleteModalOpen(note);
     reset();
-    setNoteIdDeleted(noteIdDeleted, note._id, note);
-    console.log(noteIdDeleted);
   };
 
   // Close modal when click outside
@@ -45,10 +37,10 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
         }
       };
 
-      document.addEventListener('click', handleFocus);
+      document.addEventListener("click", handleFocus);
 
       return () => {
-        document.removeEventListener('click', handleFocus);
+        document.removeEventListener("click", handleFocus);
       };
     }
   }, [modalRef, noteIdActivedOptions, isOpen, onChange]);
@@ -57,7 +49,7 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
     <div
       ref={modalRef}
       className={`
-        ${isOpen ? 'flex flex-col' : 'hidden'}
+        ${isOpen ? "flex flex-col" : "hidden"}
         p-1
         min-w-[100px]
         max-w-[200px]
