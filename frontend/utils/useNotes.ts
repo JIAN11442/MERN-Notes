@@ -1,18 +1,14 @@
-import { NoteIdActivedOptions, NoteIdCollapsed, NoteType } from "@/types";
-import { create } from "zustand";
+import { create } from 'zustand';
+
+import { NoteIdCollapsed, NoteType } from '@/types';
 
 interface useNotesProps {
   notes: NoteType[];
   noteIdCollapsed: NoteIdCollapsed[];
-  noteIdActivedOptions: NoteIdActivedOptions[];
 
   setNotes: (notes: NoteType[]) => void;
   setNoteIdCollapsed: (
     noteIdCollapsed?: NoteIdCollapsed[],
-    targetId?: string
-  ) => void;
-  setNoteIdOptions: (
-    noteIdActivedOptions?: NoteIdActivedOptions[],
     targetId?: string
   ) => void;
 }
@@ -20,7 +16,6 @@ interface useNotesProps {
 const useNotes = create<useNotesProps>((set) => ({
   notes: [],
   noteIdCollapsed: [],
-  noteIdActivedOptions: [],
 
   setNotes: (notes: NoteType[]) => set({ notes: notes }),
   setNoteIdCollapsed: (
@@ -41,25 +36,6 @@ const useNotes = create<useNotesProps>((set) => ({
       set({ noteIdCollapsed: noteIdCollapsed });
     } else {
       set({ noteIdCollapsed: noteIdCollapsed });
-    }
-  },
-  setNoteIdOptions: (
-    noteIdActivedOptions?: NoteIdActivedOptions[],
-    targetId?: string
-  ) => {
-    if (noteIdActivedOptions && noteIdActivedOptions.length > 0) {
-      if (targetId) {
-        const targetIndex = noteIdActivedOptions.findIndex(
-          (item: NoteIdActivedOptions) => item._id === targetId
-        );
-        if (targetIndex !== -1) {
-          noteIdActivedOptions[targetIndex].activedOptions =
-            !noteIdActivedOptions[targetIndex].activedOptions;
-        }
-      }
-      set({ noteIdActivedOptions: noteIdActivedOptions });
-    } else {
-      set({ noteIdActivedOptions: noteIdActivedOptions });
     }
   },
 }));

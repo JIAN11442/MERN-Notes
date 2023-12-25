@@ -15,3 +15,15 @@ export interface NoteIdActivedOptions {
   _id: string;
   activedOptions: boolean;
 }
+
+export interface NoteIdEdited {
+  _id: string;
+  isEdited: boolean;
+  noteContent: NoteType;
+}
+
+export interface NoteIdDeleted {
+  _id: string;
+  isDeleted: boolean;
+  noteContent: NoteType;
+}

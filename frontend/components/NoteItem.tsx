@@ -1,25 +1,23 @@
-import { useRef } from "react";
-import { SlOptionsVertical } from "react-icons/sl";
+import { useRef } from 'react';
+import { SlOptionsVertical } from 'react-icons/sl';
 
-import { NoteType } from "@/types";
-import useNotes from "@/utils/useNotes";
-import CreatedUpdatedDate from "@/utils/formatData";
+import OptionsModal from './OptionsModal';
 
-import "../styles/noteCard.css";
-import "../styles/scrollbar.css";
-import OptionsModal from "./OptionsModal";
+import { NoteIdActivedOptions, NoteType } from '@/types';
+import useNotes from '@/utils/useNotes';
+import useOptionModal from '@/utils/useOptionModal';
+import CreatedUpdatedDate from '@/utils/formatData';
+
+import '../styles/noteCard.css';
+import '../styles/scrollbar.css';
 
 interface NoteItemProps {
   note: NoteType;
 }
 
 const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
-  const {
-    noteIdCollapsed,
-    setNoteIdCollapsed,
-    noteIdActivedOptions,
-    setNoteIdOptions,
-  } = useNotes();
+  const { noteIdCollapsed, setNoteIdCollapsed } = useNotes();
+  const { noteIdActivedOptions, setNoteIdOptions, reset } = useOptionModal();
   const textRef = useRef<HTMLDivElement>(null);
   const noteRef = useRef<HTMLDivElement>(null);
   const overflowY = () => {
@@ -35,6 +33,9 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
   )[0].collapsed;
 
   const formatDate = CreatedUpdatedDate(note.createdAt, note.updatedAt);
+  const handleOptionsOnChange = () => {
+    reset();
+  };
 
   return (
     <div
@@ -96,6 +97,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
         >
           <SlOptionsVertical
             onClick={() => {
+              reset();
               setNoteIdOptions(noteIdActivedOptions, note._id);
             }}
             size={15}
@@ -106,18 +108,33 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
               transition
             "
           />
-          <OptionsModal
-            isOpen={
-              noteIdActivedOptions.filter((item) => item._id === note._id)[0]
-                .activedOptions
-            }
-          />
+          <div
+            className="
+              absolute
+              top-0
+              right-0
+              z-1
+            "
+          >
+            <OptionsModal
+              isOpen={
+                noteIdActivedOptions.filter(
+                  (item: NoteIdActivedOptions) => item._id === note._id
+                )[0].activedOptions
+              }
+              onChange={handleOptionsOnChange}
+              note={note}
+            />
+          </div>
         </div>
       </div>
 
       {/* Content */}
       <div
-        onClick={() => setNoteIdCollapsed(noteIdCollapsed, note._id)}
+        onClick={() => {
+          reset();
+          setNoteIdCollapsed(noteIdCollapsed, note._id);
+        }}
         ref={noteRef}
         className={`
           flex
@@ -127,8 +144,8 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
           overflow-hidden
           ${
             overflowY() && currNoteIdCollapsed === false
-              ? "custom-mask-image"
-              : "overflow-y-auto custom-scrollbar"
+              ? 'custom-mask-image'
+              : 'overflow-y-auto custom-scrollbar'
           }
         `}
       >

@@ -1,18 +1,63 @@
-import { MdOutlineDelete, MdOutlineEditNote } from "react-icons/md";
+import { useEffect, useRef } from 'react';
+import { MdOutlineDelete, MdOutlineEditNote } from 'react-icons/md';
+
+import { NoteType } from '@/types';
+import useOptionModal from '@/utils/useOptionModal';
 
 interface OptionsModalProps {
   isOpen?: boolean;
+  onChange?: () => void;
+  note: NoteType;
 }
 
-const OptionsModal: React.FC<OptionsModalProps> = ({ isOpen }) => {
+const OptionsModal: React.FC<OptionsModalProps> = ({
+  isOpen,
+  onChange,
+  note,
+}) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const {
+    noteIdActivedOptions,
+    noteIdEdited,
+    noteIdDeleted,
+    setNoteIdOptions,
+    setNoteIdEdited,
+    setNoteIdDeleted,
+  } = useOptionModal();
+
+  const handleEditedClick = () => {
+    setNoteIdOptions(noteIdActivedOptions, note._id);
+    setNoteIdEdited(noteIdEdited, note._id, note);
+    console.log(noteIdEdited);
+  };
+  const handleDeletedClick = () => {
+    setNoteIdOptions(noteIdActivedOptions, note._id);
+    setNoteIdDeleted(noteIdDeleted, note._id, note);
+    console.log(noteIdDeleted);
+  };
+
+  // Close modal when click outside
+  useEffect(() => {
+    if (isOpen && onChange) {
+      const handleFocus = (e: MouseEvent) => {
+        if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+          onChange();
+        }
+      };
+
+      document.addEventListener('click', handleFocus);
+
+      return () => {
+        document.removeEventListener('click', handleFocus);
+      };
+    }
+  }, [modalRef, noteIdActivedOptions, isOpen, onChange]);
+
   return (
     <div
+      ref={modalRef}
       className={`
-        absolute
-        top-5
-        right-2
-        ${isOpen ? "flex" : "hidden"}
-        flex-col
+        ${isOpen ? 'flex flex-col' : 'hidden'}
         p-1
         min-w-[100px]
         max-w-[200px]
@@ -25,6 +70,7 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ isOpen }) => {
     >
       {/* Edit */}
       <div
+        onClick={handleEditedClick}
         className="
           flex
           px-2
@@ -44,6 +90,7 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ isOpen }) => {
 
       {/* Delete */}
       <div
+        onClick={handleDeletedClick}
         className="
           flex
           px-2
