@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import InputModal from '@/components/InputModal';
+import DeleteModal from '@/components/DeleteModal';
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -14,7 +15,12 @@ const ModalProvider = () => {
     return null;
   }
 
-  return <InputModal />;
+  return (
+    <>
+      <InputModal />
+      <DeleteModal />
+    </>
+  );
 };
 
 export default ModalProvider;

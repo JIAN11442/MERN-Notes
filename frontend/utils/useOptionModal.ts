@@ -95,7 +95,6 @@ const useOptionModal = create<optionModalProps>((set, get) => ({
       set({ noteIdDeleted: noteIdDeleted });
     }
   },
-
   reset: () => {
     const { noteIdActivedOptions, noteIdEdited, noteIdDeleted } = get();
 

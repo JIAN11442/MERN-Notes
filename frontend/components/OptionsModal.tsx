@@ -20,18 +20,18 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
     noteIdActivedOptions,
     noteIdEdited,
     noteIdDeleted,
-    setNoteIdOptions,
     setNoteIdEdited,
     setNoteIdDeleted,
+    reset,
   } = useOptionModal();
 
   const handleEditedClick = () => {
-    setNoteIdOptions(noteIdActivedOptions, note._id);
+    reset();
     setNoteIdEdited(noteIdEdited, note._id, note);
     console.log(noteIdEdited);
   };
   const handleDeletedClick = () => {
-    setNoteIdOptions(noteIdActivedOptions, note._id);
+    reset();
     setNoteIdDeleted(noteIdDeleted, note._id, note);
     console.log(noteIdDeleted);
   };
