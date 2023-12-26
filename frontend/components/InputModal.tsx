@@ -16,8 +16,8 @@ import { NoteInput } from '@/fetchApi/notes.api';
 import useOptionModal from '@/utils/useOptionModal';
 
 const InputModal = () => {
-  const inputModal = useInputModal();
   const router = useRouter();
+  const inputModal = useInputModal();
   const { setNotes, notes, setNoteIdCollapsed, noteIdCollapsed } = useNotes();
   const {
     setNoteIdOptions,
@@ -28,43 +28,48 @@ const InputModal = () => {
 
   const title = editModalOpenState?.isEdited ? 'Edit Note' : 'Add Note';
 
-  // Edit Title and Content State
-  const [editTitle, setEditTitle] = useState<string | undefined>(
-    editModalOpenState?.note?.title
-  );
-  const [editContent, setEditContent] = useState<string | undefined>(
-    editModalOpenState?.note?.content
-  );
-
+  // useForm
   const {
     register,
     handleSubmit,
-    reset: FormReset,
     setValue,
-    formState: { errors, isSubmitting, isSubmitted },
+    reset: FormReset,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<NoteInput>({
     defaultValues: {
-      title: editTitle || '',
-      content: editContent || '',
+      title: editModalOpenState?.note?.title,
+      content: editModalOpenState?.note?.content,
     },
   });
 
+  const [isNothingChanged, setIsNothingChanged] = useState<boolean>(false);
+
+  // OnChange Types
   const modalOnChange = () => {
     inputModal.close();
     EditModalReset();
   };
   const titleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditTitle(e.target.value);
     setValue('title', e.target.value);
   };
   const contentOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditContent(e.target.value);
     setValue('content', e.target.value);
   };
 
   const onSubmit: SubmitHandler<NoteInput> = async (newNote: NoteInput) => {
     try {
+      // 當編輯視窗開啟且有資料，代表目前submit的是編輯模式
       if (editModalOpenState?.isEdited && editModalOpenState.note) {
+        // 假設沒有改變，就不用更新，並且跳出提示( setIsNothingChanged 是為了避免關閉 Modal )
+        if (
+          newNote.title === editModalOpenState.note.title &&
+          newNote.content === editModalOpenState.note.content
+        ) {
+          setIsNothingChanged(true);
+          return toast('Nothing changed', { icon: '⚡' });
+        }
+
+        // 如果有改變，就更新資料（Database）
         const noteResponse = await NotesApi.updateNote(
           editModalOpenState.note?._id,
           {
@@ -73,13 +78,19 @@ const InputModal = () => {
             content: newNote.content || '',
           }
         );
+
+        // 更新資料（State）
         setNotes(
           notes.map((note) =>
             note._id === noteResponse._id ? noteResponse : note
           )
         );
 
-        toast.success('Note updated successfully');
+        toast.promise(Promise.resolve(noteResponse), {
+          loading: 'Updating note...',
+          success: 'Note updated successfully',
+          error: 'Error updating note',
+        });
       } else {
         const noteResponse = await NotesApi.createNote(newNote);
 
@@ -101,18 +112,21 @@ const InputModal = () => {
     }
   };
 
+  // 當點擊 Save 後，如果成功更新資料，就執行以下程式碼
   useEffect(() => {
-    if (isSubmitted) {
+    if (isSubmitSuccessful && !isNothingChanged) {
       inputModal.close();
       EditModalReset();
       FormReset();
       router.refresh();
     }
-  }, [isSubmitted]);
+  }, [isSubmitSuccessful]);
 
+  // 但目前是編輯模式時，即 editModalOpenState?.isEdited === true 時
+  // 把 editModalOpenState?.note 的資料傳給 Form 的 setValue，
+  // 而我們的 < input > 和 < textarea > 的 value 是從 useForm 的 register 來的
+  // 所以 < input > 和 < textarea > 才能顯示預設值
   useEffect(() => {
-    setEditTitle(editModalOpenState?.note?.title || '');
-    setEditContent(editModalOpenState?.note?.content || '');
     setValue('title', editModalOpenState?.note?.title || '');
     setValue('content', editModalOpenState?.note?.content || '');
   }, [editModalOpenState?.isEdited]);
@@ -148,7 +162,6 @@ const InputModal = () => {
                 placeholder="Title"
                 maxLength={25}
                 {...register('title', { required: 'Required' })}
-                value={editTitle}
                 onChange={titleOnChange}
                 className={`
                   flex
@@ -221,7 +234,6 @@ const InputModal = () => {
               id="content"
               placeholder="Content"
               {...register('content', { required: false })}
-              value={editContent}
               onChange={contentOnChange}
               className={`
                 flex

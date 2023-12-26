@@ -181,6 +181,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
           bg-gradient-to-l
           from-cornsilk-300
           text-[11px]
+          text-medium
         `}
       >
         {formatDate}

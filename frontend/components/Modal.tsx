@@ -40,7 +40,7 @@ const Modal: React.FC<TitleModalProps> = ({
             top-[50%]
             left-[50%]
             rounded-md
-            w-[450px]
+            w-[500px]
             max-w-[90wv]
             h-auto
             hover:outline-none
