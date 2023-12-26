@@ -27,7 +27,8 @@ const InputModal = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    reset,
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm<NoteInput>({
     defaultValues: {
       title: '',
@@ -57,11 +58,12 @@ const InputModal = () => {
   };
 
   useEffect(() => {
-    if (isSubmitSuccessful) {
+    if (isSubmitted) {
       inputModal.close();
+      reset();
       router.refresh();
     }
-  }, [isSubmitSuccessful]);
+  }, [isSubmitted]);
 
   return (
     <Modal isOpen={inputModal.isOpen} onChange={onChange} title="Add Note">
