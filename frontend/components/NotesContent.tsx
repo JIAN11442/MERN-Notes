@@ -13,7 +13,7 @@ import useOptionModal from '@/utils/useOptionModal';
 
 const NotesContent = () => {
   const { notes, setNotes, setNoteIdCollapsed } = useNotes();
-  const { setNoteIdOptions, reset } = useOptionModal();
+  const { setNoteIdOptions, OptionsModalReset } = useOptionModal();
   const inputModal = useInputModal();
 
   // Fetch All Notes && Collapse
@@ -45,7 +45,7 @@ const NotesContent = () => {
       <Button
         onClick={() => {
           inputModal.open();
-          reset();
+          OptionsModalReset();
         }}
         className="
           flex-block

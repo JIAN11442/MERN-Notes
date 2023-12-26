@@ -10,7 +10,8 @@ import { useRouter } from 'next/navigation';
 const DeleteModal = () => {
   const { notes, setNotes } = useNotes();
   const router = useRouter();
-  const { reset, deleteModalClose, deleteModalOpenState } = useOptionModal();
+  const { DeleteModalReset, deleteModalClose, deleteModalOpenState } =
+    useOptionModal();
 
   // Handel close modal when click outside
   const onChange = () => {
@@ -34,8 +35,7 @@ const DeleteModal = () => {
 
         toast.success('Note deleted successfully');
 
-        reset();
-        onChange();
+        DeleteModalReset();
         router.refresh();
       }
     } catch (error) {

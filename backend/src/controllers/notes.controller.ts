@@ -93,6 +93,10 @@ export const updateNoteById: RequestHandler<unknown, unknown, updateNoteBody, up
       throw createHttpError(404, 'Note not found');
     }
 
+    if (newTitle === noteById.title && newContent === noteById.content) {
+      throw createHttpError(400, 'Note not modified');
+    }
+
     noteById.title = newTitle;
     noteById.content = newContent;
 

@@ -1,10 +1,10 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 import {
   NoteIdActivedOptions,
   NoteIsDeleted,
   NoteIsEdited,
   NoteType,
-} from "@/types";
+} from '@/types';
 
 interface optionModalProps {
   noteIdActivedOptions: NoteIdActivedOptions[];
@@ -20,7 +20,9 @@ interface optionModalProps {
   deleteModalOpen: (targetNote: NoteType) => void;
   deleteModalClose: () => void;
 
-  reset: () => void;
+  OptionsModalReset: () => void;
+  EditModalReset: () => void;
+  DeleteModalReset: () => void;
 }
 
 const useOptionModal = create<optionModalProps>((set, get) => ({
@@ -53,8 +55,7 @@ const useOptionModal = create<optionModalProps>((set, get) => ({
   deleteModalOpen: (targetNote) =>
     set({ deleteModalOpenState: { isDeleted: true, note: targetNote } }),
   deleteModalClose: () => set({ deleteModalOpenState: null }),
-
-  reset: () => {
+  OptionsModalReset: () => {
     const { noteIdActivedOptions } = get();
 
     if (noteIdActivedOptions) {
@@ -64,7 +65,12 @@ const useOptionModal = create<optionModalProps>((set, get) => ({
       });
       set({ noteIdActivedOptions: resetNoteIdActivedOptions });
     }
+    // set({ noteIdActivedOptions: [] });
   },
+  EditModalReset: () =>
+    set({ editModalOpenState: { isEdited: false, note: null } }),
+  DeleteModalReset: () =>
+    set({ deleteModalOpenState: { isDeleted: false, note: null } }),
 }));
 
 export default useOptionModal;

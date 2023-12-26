@@ -17,7 +17,8 @@ interface NoteItemProps {
 
 const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
   const { noteIdCollapsed, setNoteIdCollapsed } = useNotes();
-  const { noteIdActivedOptions, setNoteIdOptions, reset } = useOptionModal();
+  const { noteIdActivedOptions, setNoteIdOptions, OptionsModalReset } =
+    useOptionModal();
   const textRef = useRef<HTMLDivElement>(null);
   const noteRef = useRef<HTMLDivElement>(null);
   const overflowY = () => {
@@ -43,7 +44,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
     }
   };
   const handleOptionsOnChange = () => {
-    reset();
+    OptionsModalReset();
   };
 
   return (
@@ -106,7 +107,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
         >
           <SlOptionsVertical
             onClick={() => {
-              reset();
+              OptionsModalReset();
               setNoteIdOptions(noteIdActivedOptions, note._id);
             }}
             size={15}
@@ -137,7 +138,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note }) => {
       {/* Content */}
       <div
         onClick={() => {
-          reset();
+          OptionsModalReset();
           setNoteIdCollapsed(noteIdCollapsed, note._id);
         }}
         ref={noteRef}
