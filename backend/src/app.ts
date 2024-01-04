@@ -1,8 +1,10 @@
-import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
-import createHttpError, { isHttpError } from 'http-errors';
 import cors from 'cors';
-import noteRouter from './router/notes.router';
+import createHttpError, { isHttpError } from 'http-errors';
+import express, { Request, Response, NextFunction } from 'express';
+
+import noteRoutes from './routes/notes.routes';
+import userRoutes from './routes/users.routes';
 
 const app = express();
 
@@ -18,7 +20,8 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 
-app.use('/api/notes', noteRouter);
+app.use('/api/users', userRoutes);
+app.use('/api/notes', noteRoutes);
 
 app.use((req, res, next) => {
   next(createHttpError(404, 'Endpoint not found'));
