@@ -69,7 +69,13 @@ const NotesContent = () => {
   );
 
   return (
-    <div className="flex flex-col">
+    <div
+      className="
+        flex
+        flex-col
+      "
+    >
+      {/* Add Note Button */}
       <Button
         onClick={() => {
           inputModal.open();
@@ -88,6 +94,7 @@ const NotesContent = () => {
         Add a note
       </Button>
 
+      {/* Notes Content */}
       {notesLoading && (
         <div
           className="
