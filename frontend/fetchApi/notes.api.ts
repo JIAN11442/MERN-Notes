@@ -1,6 +1,6 @@
 import { NoteType } from '@/types';
 
-const fetchData = async (url: RequestInfo, method: RequestInit) => {
+export const fetchData = async (url: RequestInfo, method: RequestInit) => {
   const response = await fetch(url, method);
   if (response.ok) {
     return response;

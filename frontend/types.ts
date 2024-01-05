@@ -25,3 +25,9 @@ export interface NoteIsDeleted {
   isDeleted: boolean;
   note: NoteType | null;
 }
+
+export interface UserType {
+  username: string;
+  email: string;
+  password: string;
+}

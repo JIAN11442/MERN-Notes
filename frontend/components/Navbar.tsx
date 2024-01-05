@@ -1,6 +1,8 @@
-import { useRouter } from 'next/navigation';
-import Button from './Button';
-import useUser from '@/utils/useUser';
+import { useRouter } from "next/navigation";
+
+import Button from "./Button";
+
+import useUser from "@/utils/useUser";
 
 const Navbar = () => {
   const router = useRouter();
@@ -17,7 +19,7 @@ const Navbar = () => {
         items-center
         justify-between
         bg-gradient-to-r
-        from-blue-700
+        from-indigo-900
         to-blue-500
         px-4
         py-3
