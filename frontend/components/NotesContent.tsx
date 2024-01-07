@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 
-import Button from './Button';
-import NoteItem from './NoteItem';
+import Button from "./Button";
+import NoteItem from "./NoteItem";
 
-import * as NotesApi from '../fetchApi/notes.api';
+import * as NotesApi from "../fetchApi/notes.api";
 
-import { NoteType } from '@/types';
-import useNotes from '@/utils/useNotes';
-import useInputModal from '@/utils/useInputModal';
-import useOptionModal from '@/utils/useOptionModal';
+import { NoteType } from "@/types";
+import useNotes from "@/utils/useNotes";
+import useInputModal from "@/utils/useInputModal";
+import useOptionModal from "@/utils/useOptionModal";
 
 const NotesContent = () => {
   const { notes, setNotes, setNoteIdCollapsed } = useNotes();
@@ -60,6 +60,7 @@ const NotesContent = () => {
         xl:grid-cols-4
         gap-3
         px-10
+        pb-10
       "
     >
       {notes.map((note) => (
