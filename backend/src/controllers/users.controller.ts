@@ -8,25 +8,28 @@ import bcrypt from 'bcrypt';
 
 import UserSchemaModel from '../models/users.schema';
 
-interface SignUpBody {
-  username?: string;
-  email?: string;
-  password?: string;
-}
-
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
   const authenticatedUserId = req.session.userId;
+
+  console.log('authenticatedUserId:', authenticatedUserId);
   try {
     if (!authenticatedUserId) {
       throw createHttpError(401, 'User not authenticated');
     }
 
     const user = await UserSchemaModel.findById(authenticatedUserId).select('+email').exec();
+
     res.status(200).json(user);
   } catch (error) {
     next(error);
   }
 };
+
+interface SignUpBody {
+  username?: string;
+  email?: string;
+  password?: string;
+}
 
 export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = async (req, res, next) => {
   const { username, email, password: passwordRaw } = req.body;

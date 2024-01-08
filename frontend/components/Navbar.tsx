@@ -1,8 +1,8 @@
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
-import Button from "./Button";
+import Button from './Button';
 
-import useUser from "@/utils/useUser";
+import useUser from '@/utils/useUser';
 
 const Navbar = () => {
   const router = useRouter();
@@ -41,8 +41,11 @@ const Navbar = () => {
       </div>
 
       {/* SignUp || LogIn */}
-
-      <div>
+      <div
+        className={`
+          ${userState.loginUser || userState.signupUser ? 'hidden' : 'flex'}
+        `}
+      >
         {/* SignUp */}
         <Button
           onClick={userState.signup}
@@ -71,6 +74,32 @@ const Navbar = () => {
           "
         >
           Log in
+        </Button>
+      </div>
+
+      {/* Sign in as || Logout */}
+      <div
+        className={`
+          ${userState.loginUser || userState.signupUser ? 'flex' : 'hidden'}
+        `}
+      >
+        {/* Sign in as */}
+        <div>
+          <p>Sign in as: </p>
+        </div>
+
+        {/* Logout */}
+        <Button
+          className="
+            py-1
+            border-0
+            outline-none
+            bg-transparent
+            text-white
+            font-medium
+          "
+        >
+          Logout
         </Button>
       </div>
     </div>

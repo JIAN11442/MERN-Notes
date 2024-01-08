@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, SubmitHandler, FieldErrors } from 'react-hook-form';
+import { useState } from 'react';
+import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form';
 import { AiFillEyeInvisible } from 'react-icons/ai';
 import { MdVisibility } from 'react-icons/md';
 import { PiWarningCircleLight } from 'react-icons/pi';
@@ -10,14 +10,12 @@ import Modal from './Modal';
 import Button from './Button';
 
 import useUser from '@/utils/useUser';
-import { SignUpCredentials } from '@/fetchApi/users.api';
+import { LoginCredentials } from '@/fetchApi/users.api';
 import * as UsersApi from '@/fetchApi/users.api';
 
-const SignUpModal = () => {
+const LoginModal = () => {
   const userState = useUser();
   const router = useRouter();
-
-  // Modal OnChange
   const modalOnChange = () => {
     userState.close();
     reset();
@@ -30,22 +28,21 @@ const SignUpModal = () => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-  } = useForm<SignUpCredentials>({
+  } = useForm<LoginCredentials>({
     defaultValues: {
       username: '',
-      email: '',
       password: '',
     },
   });
 
-  const onSubmit: SubmitHandler<SignUpCredentials> = async (
-    credentials: SignUpCredentials
+  const onSubmit: SubmitHandler<LoginCredentials> = async (
+    credentials: LoginCredentials
   ) => {
     try {
-      const newUser = await UsersApi.signup(credentials);
-      userState.setSignupUser(newUser);
+      const loginUser = await UsersApi.login(credentials);
 
       if (isSubmitSuccessful) {
+        userState.setLoginUser(loginUser);
         toast.success('Sign Up Successfully');
         modalOnChange();
       }
@@ -76,7 +73,7 @@ const SignUpModal = () => {
   const VisibleIcon = passwordVisible ? AiFillEyeInvisible : MdVisibility;
 
   interface ErrosType {
-    errorsTarget: FieldErrors<SignUpCredentials> | undefined;
+    errorsTarget: FieldErrors<LoginCredentials> | undefined;
   }
 
   // Warning Icon
@@ -121,30 +118,27 @@ const SignUpModal = () => {
   };
 
   return (
-    <Modal
-      isOpen={userState.signupOpen}
-      onChange={modalOnChange}
-      title="Sign Up"
-    >
+    <Modal isOpen={userState.loginOpen} onChange={modalOnChange} title="Log In">
       <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Username && Password */}
         <div
           className="
-            flex
-            flex-col
-            p-[20px]
-            pt-0
-            gap-y-4
-            border-b
-            border-neutral-200/50    
-          "
+          flex
+          flex-col
+          p-[20px]
+          pt-0
+          gap-y-4
+          border-b
+          border-neutral-200/50    
+        "
         >
           {/* Username */}
           <div
             className="
-              flex
-              flex-col
-              gap-y-2
-            "
+            flex
+            flex-col
+            gap-y-2
+          "
           >
             {/* Username title */}
             <p className="text-md font-medium">Username</p>
@@ -191,58 +185,6 @@ const SignUpModal = () => {
             <WarningErrorMessage
               errorsMessage={errors.username?.message || ''}
             />
-          </div>
-
-          {/* Email */}
-          <div
-            className="
-              flex
-              flex-col
-              gap-y-2
-            "
-          >
-            {/* Email Title */}
-            <p className="text-md font-medium">Email</p>
-
-            {/* Email Form && Warning Icon */}
-            <div className="flex relative">
-              {/* Email Form */}
-              <input
-                id="email"
-                type="text"
-                placeholder="example123@gmail.com"
-                maxLength={25}
-                {...register('email', { required: 'Required' })}
-                className={`
-                  flex
-                  w-full
-                  px-3
-                  py-2.5
-                  border-1
-                  outline-none
-                  rounded-md
-                  shadow-[1px_1px_6px_1px_rgba(0,0,0,0)]
-                  focus:placeholder:text-transparent
-                  text-medium
-                  ${
-                    errors.email
-                      ? `
-                        border-red-200 
-                        shadow-red-200
-                        `
-                      : `
-                        focus:border-blue-200
-                        focus:shadow-blue-200
-                        `
-                  }
-                `}
-              />
-              {/* Email Warning Icon */}
-              <WarningIcon errorsTarget={errors.email} />
-            </div>
-
-            {/* Email Error Message */}
-            <WarningErrorMessage errorsMessage={errors.email?.message || ''} />
           </div>
 
           {/* Password */}
@@ -322,21 +264,21 @@ const SignUpModal = () => {
         {/* Submit Button */}
         <div
           className="
-            flex-block
-            py-4
-            px-[20px]
-          "
+          flex-block
+          py-4
+          px-[20px]
+        "
         >
           <Button
             type="submit"
             disabled={isSubmitting}
             className="
-              w-full
-              px-3
-              py-2
-              rounded-lg
-              text-white
-            "
+            w-full
+            px-3
+            py-2
+            rounded-lg
+            text-white
+          "
           >
             Save
           </Button>
@@ -346,4 +288,4 @@ const SignUpModal = () => {
   );
 };
 
-export default SignUpModal;
+export default LoginModal;
